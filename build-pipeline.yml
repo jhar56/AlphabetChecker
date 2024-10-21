@@ -1,0 +1,23 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: DockerInstaller@0
+  inputs:
+    dockerVersion: 'latest'
+
+- script: |
+    docker build -t ecr-repo-url/alphabetchecker:$(Build.BuildId) .
+    docker push ecr-repo-url/alphabetchecker:$(Build.BuildId)
+  displayName: 'Build and Push Docker Image'
+
+- task: AmazonWebServices.aws-vsts-tools.ECRPushImage@1
+  inputs:
+    awsCredentials: '<aws-service-connection>'
+    regionName: 'us-east-1'
+    repositoryName: 'alphabetchecker'
+    imageSource: 'build'
+    sourceImageTag: '$(Build.BuildId)'
