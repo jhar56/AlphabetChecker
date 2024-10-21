@@ -1,0 +1,6 @@
+@AlphabetChecker.API_HostAddress = http://localhost:5254
+
+GET {{AlphabetChecker.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
